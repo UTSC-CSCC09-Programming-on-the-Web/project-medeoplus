@@ -1,6 +1,3 @@
-Of course! Here is the complete, final version of your `README.md` translated into English and enhanced with emojis for better visual appeal and readability.
-
----
 
 # 🩺 Project Proposal: Medeo plus ✨
 
@@ -152,7 +149,7 @@ This project uses Docker Compose to manage its multi-container environment, ensu
 
 1.  **Clone the Repository**
     ```bash
-    git clone [YOUR_GIT_REPOSITORY_LINK]
+    git clone https://github.com/UTSC-CSCC09-Programming-on-the-Web/project-medeoplus
     cd medeo-plus
     ```
 
