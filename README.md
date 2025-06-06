@@ -5,7 +5,7 @@
 | Name | UTORid | Email |
 | :--- | :--- | :--- |
 | Mianli Wang | `wangm246` | `mianli.wang@mail.utoronto.ca` |
-| Steve | `...` | `st.nguyen@mail.utoronto.ca` |
+| Steve Nguyen | `nguy3671` | `st.nguyen@mail.utoronto.ca` |
 
 ---
 
