@@ -11,9 +11,9 @@
 
 ## 🚀 Project Overview
 
-**Medeo plus** is a modern web application that streamlines patient–provider communication and mental‑health support. Users can book **Appointments**, exchange **Messages**, and share **Documents** with their clinicians in a single, secure workspace.
+**Medeo plus** is a modern web application that streamlines patient–provider communication and mental‑health support. Users can exchange **Messages**, and go on video calls with their clinicians in a single, secure workspace.
 
-The platform adopts a **micro‑service architecture**, separating core business logic from compute‑heavy AI workloads. A **Light Retrieval‑Augmented Generation (LightRAG)** server—running in its own Python container—provides hybrid **knowledge‑graph + vector** retrieval, source citation, multi‑modal parsing (PDF / images), and an Ollama‑compatible REST API. This enables truly personalized, evidence‑grounded responses based on each user’s history and uploads.
+The platform adopts a **micro‑service architecture**, separating core business logic from compute‑heavy AI workloads. A **Light Retrieval‑Augmented Generation (LightRAG)** server—running in its own Python container—provides hybrid **knowledge‑graph + vector** retrieval, source citation, and an Ollama‑compatible REST API. This enables truly personalized, evidence‑grounded responses based on each user’s history and uploads.
 
 ---
 
@@ -105,9 +105,8 @@ flowchart TD
 | 🔐 **Auth (OAuth 2.0)**    | Supabase OAuth ( Google )                                                      |
 | 💳 **Payments**            | Stripe Checkout (test)                                                         |
 | 🧠 **LLM / RAG**           | LightRAG (FastAPI) • OpenAI GPT‑4o • LangChain.js *(optional post‑processing)* |
-| 🌌 **Vector DB**           | Qdrant Cloud                                                                   |
-| 🔄 **Queue**               | BullMQ + Redis                                                                 |
-| 🗄️ **Object Storage**     | Supabase Storage (S3‑compatible, RLS protected)                                |
+| 🌌 **Vector DB**           | Qdrant Cloud *(optional optimization)*                                         |
+| 🔄 **Queue**               | BullMQ + Redis *(optional optimization)*                                       |
 | 📹 **Video**               | Daily.co                                                                       |
 | 🎤 **Speech‑to‑Text**      | AssemblyAI Streaming API                                                       |
 | 🐳 **Deployment**          | DigitalOcean VM • Docker Compose • Nginx                                       |
@@ -117,20 +116,14 @@ flowchart TD
 
 ## ✨ Core Features & Implementation
 
-### a. Hybrid LightRAG Dialogue
+### a. Messages with Hybrid LightRAG Integration
 
-1. **Express API** receives a user prompt and forwards it via **REST** to `light-rag:5000`.
-2. **LightRAG** performs hybrid KG + vector retrieval from **Qdrant**, assembles citations and context, calls **OpenAI** for generation, and streams tokens back to Express.
-3. Express emits the answer to the browser over **Socket.IO** (with streaming).
+1. Patient and providers can message one-to-one.
+2. We will have an AI provider. When the user messages them, **Express API** receives a user prompt and forwards it via **REST** to `light-rag:5000`.
+3. **LightRAG** performs hybrid KG + vector retrieval from **Qdrant**, assembles citations and context, calls **OpenAI** for generation, and streams tokens back to Express.
+4. Express emits the answer to the browser over **Socket.IO** (with streaming).
 
-### b. Asynchronous Pipeline
-
-* Document uploads are streamed to **Supabase Storage**.
-* Express enqueues a **“process‑doc”** job (BullMQ).
-* Worker → downloads file, transcribes (AssemblyAI if audio), segments text, embeds (OpenAI), and upserts vectors into **Qdrant**.
-* Non‑blocking: the user UI instantly shows “processing…” and updates via a queue event.
-
-### c. Live Video + Transcription
+### b. Live Video + Transcription
 
 * **Daily.co** iframe handles video.
 * Browser captures audio → **WebSocket** to Express → proxied to **AssemblyAI** for real‑time captions/translation.
@@ -143,15 +136,14 @@ flowchart TD
 
   * Architecture Validation: Achieve a stable local launch of all services using Docker Compose. 
   * Debug the inter-service communication between Express and FastAPI.
-  * Core Workflow: Implement the complete user flow from OAuth registration to a successful Stripe subscription payment.
   * Basic Features: Build the foundational UI and APIs for the Messages, Appointments, and Documents modules.
 
 ### Beta Version
 
   * LightRAG Implementation: Complete the RAG data indexing and retrieval pipeline, enabling personalized AI conversations.
-  * Asynchronous Pipeline: Successfully implement the document processing pipeline powered by BullMQ and Redis.
   * Feature Completion: Integrate the real-time video transcription/translation feature and deploy the full application to a DigitalOcean VM.
-
+  * Core Workflow: Implement the complete user flow from OAuth registration to a successful Stripe subscription payment.
+    
 ### Final Version
 
   * Optimization & Bug Fixes: Resolve all identified bugs based on beta testing feedback. Optimize RAG retrieval efficiency and front-end performance.
