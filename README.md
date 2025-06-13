@@ -11,10 +11,11 @@
 
 ## 🚀 Project Overview
 
-**Medeo plus** is a modern web application that streamlines patient–provider communication and mental‑health support. Users can exchange **Messages**, and go on video calls with their clinicians in a single, secure workspace.
+**Medeo Plus** is a modern web application designed to streamline communication between patients and providers while enhancing mental health support. Within a single, secure workspace, users can exchange **messages** and join **video calls** with their clinicians. The platform is built around two core features:
 
-The platform adopts a **micro‑service architecture**, separating core business logic from compute‑heavy AI workloads. A **Light Retrieval‑Augmented Generation (LightRAG)** server—running in its own Python container—provides hybrid **knowledge‑graph + vector** retrieval, source citation, and an Ollama‑compatible REST API. This enables truly personalized, evidence‑grounded responses based on each user’s history and uploads.
-
+- **AI-Powered Messaging**: Patients and providers can engage in one-on-one messaging. In addition, users can interact with an AI assistant capable of delivering personalized, evidence-based responses tailored to the user's medical history and uploaded files. The assistant also generates concise summaries to aid clinicians, acting as a stand-in when doctors or counselors are unavailable.
+- **Live Video with Real-Time Transcription**: The video interface is embedded using a **Daily.co** iframe. Browser-captured audio is streamed via **WebSocket** to an Express server, which relays it to **AssemblyAI** for real-time transcription and translation. These captions, similar in function to services like **Mikata Health** or **Scribeberry**, support clinicians during consultations and are delivered to the user's screen through a **Socket.IO** overlay.
+  
 ---
 
 ## 🏗️ System Architecture
@@ -91,7 +92,7 @@ flowchart TD
   Express -- "WS proxy" --> AssemblyAI
 ````
 
----
+
 
 ## 🛠️ Tech Stack
 
@@ -112,24 +113,7 @@ flowchart TD
 | 🐳 **Deployment**          | DigitalOcean VM • Docker Compose • Nginx                                       |
 | 🚀 **DevOps**              | GitHub Actions (lint / CI)                                                     |
 
----
 
-## ✨ Core Features & Implementation (Killer features)
-
-### a. Messages with Hybrid LightRAG Integration
-
-1. Patient and providers can message one-to-one.
-2. We will have an AI provider. When the user messages them, **Express API** receives a user prompt and forwards it via **REST** to `light-rag:5000`.
-3. **LightRAG** performs hybrid KG + vector retrieval from **Qdrant**, assembles citations and context, calls **OpenAI** for generation, and streams tokens back to Express.
-4. Express emits the answer to the browser over **Socket.IO** (with streaming).
-
-### b. Live Video + Transcription
-
-* **Daily.co** iframe handles video.
-* Browser captures audio → **WebSocket** to Express → proxied to **AssemblyAI** for real‑time captions/translation.
-* Captions are pushed back through the Socket.IO overlay.
-
----
 
 ## 🗓️ Project Milestones
 ### Alpha Version
@@ -150,30 +134,6 @@ flowchart TD
   * Security Hardening: Conduct a thorough review of all authentication, payment, and data-handling processes.
   * Documentation & Submission: Finalize all code and documentation for submission to Gradescope.
 
----
-
-## ⚙️ Local Development
-
-```bash
-# 1 Clone
-git clone https://github.com/UTSC-CSCC09-Programming-on-the-Web/project-medeoplus
-cd medeo-plus
-
-# 2 Env
-cp backend/.env.example backend/.env
-cp rag-service/.env.example rag-service/.env
-# — fill POSTGRES_URL, SUPABASE_JWT_SECRET, STRIPE_KEY, OPENAI_KEY, etc.
-
-# 3 Run
-docker compose up --build  # new Docker CLI
-
-# URLs
-# • Frontend  http://localhost:3000
-# • API       http://localhost:8080
-# • LightRAG  http://localhost:5000
-```
-
----
 
 ## ⚖️ Legal & Ethical
 
