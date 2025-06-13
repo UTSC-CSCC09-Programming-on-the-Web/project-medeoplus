@@ -114,7 +114,7 @@ flowchart TD
 
 ---
 
-## ✨ Core Features & Implementation
+## ✨ Core Features & Implementation (Killer features)
 
 ### a. Messages with Hybrid LightRAG Integration
 
