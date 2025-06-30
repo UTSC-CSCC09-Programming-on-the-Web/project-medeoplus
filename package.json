@@ -15,9 +15,14 @@
   "type": "commonjs",
   "main": "app.js",
   "scripts": {
-    "test": "nodemon --loader ts-node/esm --test"
+    "test": "nodemon --loader ts-node/esm --test",
+    "prisma:generate": "prisma generate --schema=./backend/prisma/schema.prisma",
+    "prisma:studio": "prisma studio --schema=./backend/prisma/schema.prisma",
+    "prisma:dbpush": "prisma db push --schema=./backend/prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema=./backend/prisma/schema.prisma"
   },
   "dependencies": {
+    "@prisma/client": "^6.10.1",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.0.0",
     "express": "^5.1.0",
@@ -31,6 +36,7 @@
     "@types/node": "^24.0.7",
     "cors": "^2.8.5",
     "nodemon": "^3.1.10",
+    "prisma": "^6.10.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }

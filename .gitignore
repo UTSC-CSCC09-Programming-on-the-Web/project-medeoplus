@@ -2,3 +2,5 @@
 node_modules
 # Ignore environment variables file
 .env
+# Ignore build output directory
+/backend/generated/prisma
