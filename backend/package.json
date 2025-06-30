@@ -1,0 +1,46 @@
+{
+  "name": "project-medeoplus",
+  "version": "1.0.0",
+  "description": "| Name | UTORid | Email |\r | :--- | :--- | :--- |\r | Mianli Wang | `wangm246` | `mianli.wang@mail.utoronto.ca` |\r | Steve Nguyen | `nguy3671` | `st.nguyen@mail.utoronto.ca` |",
+  "homepage": "https://github.com/UTSC-CSCC09-Programming-on-the-Web/project-medeoplus#readme",
+  "bugs": {
+    "url": "https://github.com/UTSC-CSCC09-Programming-on-the-Web/project-medeoplus/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UTSC-CSCC09-Programming-on-the-Web/project-medeoplus.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon --loader ts-node/esm --test",
+    "prisma:generate": "npx prisma generate",
+    "prisma:studio": "npx prisma studio",
+    "prisma:dbpush": "npx prisma db push",
+    "prisma:migrate": "npx prisma migrate dev",
+    "dev": "nodemon --loader ts-node/esm --exec ts-node-dev --respawn --transpile-only app.ts",
+    "start": "node --loader ts-node/esm app.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.10.1",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.0.7",
+    "cors": "^2.8.5",
+    "nodemon": "^3.1.10",
+    "prisma": "^6.10.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
