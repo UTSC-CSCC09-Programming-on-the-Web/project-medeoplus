@@ -1,3 +1,6 @@
+import prisma from "../prisma/db";
+import Result from "../types/Result";
+
 interface Message {
     id: number;
     senderId: number;
@@ -6,26 +9,73 @@ interface Message {
     createdAt: Date;
 }
 
-const messages: Message[] = [];
-let messageIdCounter: number = 1;
-
 const Messages = {
-    getMessagesForUser(userId: number): Message[] {
-        return messages.filter(
-            message => message.receiverId === userId || message.senderId === userId
-        );
+    async getMessagesForUser(userId: number): Promise<Result<Message[]>> {
+        try {
+            // Fetch messages from the database using Prisma
+            const messages = await prisma.message.findMany({
+                where: {
+                    OR: [
+                        { receiverId: userId },
+                        { senderId: userId }
+                    ]
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            });
+            return {
+                status: "success",
+                message: "Messages fetched successfully",
+                data: messages,
+            };
+        } catch (error) {
+            throw new Error(`Failed to fetch messages: ${error}`);
+        }
     },
 
-    sendMessage(senderId: number, receiverId: number, text: string): Message {
-        const newMessage: Message = {
-            id: messageIdCounter++,
-            senderId,
-            receiverId,
-            text,
-            createdAt: new Date(),
-        };
-        messages.push(newMessage);
-        return newMessage;
+    async getMessages(userId: number, otherUserId: number): Promise<Result<Message[]>> {
+        try {
+            // Fetch messages between two users from the database using Prisma
+            const messages = await prisma.message.findMany({
+                where: {
+                    OR: [
+                        { senderId: userId, receiverId: otherUserId },
+                        { senderId: otherUserId, receiverId: userId }
+                    ]
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            });
+            return {
+                status: "success",
+                message: "Messages fetched successfully",
+                data: messages,
+            };
+        } catch (error) {
+            throw new Error(`Failed to fetch messages: ${error}`);
+        }
+    },
+
+    async sendMessage(senderId: number, receiverId: number, text: string): Promise<Result<Message>> {
+        try {
+            // Create a new message in the database using Prisma
+            const newMessage = await prisma.message.create({
+                data: {
+                    senderId,
+                    receiverId,
+                    text,
+                },
+            });
+            return {
+                status: "success",
+                message: "Message sent successfully",
+                data: newMessage,
+            };
+        } catch (error) {
+            throw new Error(`Failed to send message: ${error}`);
+        }
     },
 };
 

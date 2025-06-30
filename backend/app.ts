@@ -10,7 +10,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("frontend"));
 
-
 //create api endpoint for users
 app.use("/api/users", usersRouter);
 
@@ -19,3 +18,9 @@ app.use("/api/messages", messagesRouter);
 
 //create api endpoint for documents
 app.use("/api/documents", documentsRouter);
+
+//set the port for the backend app
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

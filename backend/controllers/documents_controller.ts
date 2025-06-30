@@ -2,23 +2,22 @@ import express from "express";
 import Documents from "../models/Documents";
 
 const documentsController = {
-    getDocumentsForUser(req: express.Request, res: express.Response) {
+    async getDocumentsForUser(req: express.Request, res: express.Response) {
         try {
             const userId = parseInt(req.params.userId, 10);
-            const userDocuments = Documents.getDocumentsForUser(userId);
+            const userDocuments = await Documents.getDocumentsForUser(userId);
             res.json(userDocuments);
         } catch (error) {
             res.status(500).json({
-                message: "An error occurred while fetching documents",
-                error: error instanceof Error ? error.message : "Unknown error",
+                message: "An internal server error occurred while fetching documents",
             });
         }
     },
 
-    createDocument(req: express.Request, res: express.Response) {
+    async createDocument(req: express.Request, res: express.Response) {
         try {
             const { userId, title, content } = req.body;
-            const newDocument = Documents.createDocument(userId, title, content);
+            const newDocument = await Documents.createDocument(userId, title, content);
             if (newDocument) {
                 res.status(201).json({
                     message: "Document created successfully",
@@ -31,8 +30,7 @@ const documentsController = {
             }
         } catch (error) {
             res.status(500).json({
-                message: "An error occurred while creating the document",
-                error: error instanceof Error ? error.message : "Unknown error",
+                message: "An internal server error occurred while creating the document",
             });
         }
     },

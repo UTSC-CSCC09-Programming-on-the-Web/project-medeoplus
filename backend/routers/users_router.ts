@@ -9,7 +9,7 @@ const usersRouter = express.Router();
 usersRouter.post("/signup", usersController.signup);
 
 //create api endpoint for login
-usersRouter.get("/login", usersController.login);
+usersRouter.post("/login", usersController.login);
 
 //create api endpoint for getting user profile
 usersRouter.get("/me", authorizeUser, usersController.getOwnUser);

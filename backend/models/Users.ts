@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Result from "../types/Result";
+import prisma from "../prisma/db";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -12,14 +13,12 @@ interface User {
     createdAt: Date;
 }
 
-const users: User[] = [];
-
-let userIdCounter: number = 1;
-
 const Users = {
-    signup(email: string, username: string, password: string): Result<User> {
+    async signup(email: string, username: string, password: string): Promise<Result<User>> {
         try {
-            const existingUser = users.find(user => user.email === email);
+            const existingUser = await prisma.user.findUnique({
+                where: { email: email },
+            });
             if (existingUser) {
                 return {
                     status: "error",
@@ -27,14 +26,14 @@ const Users = {
                 };
             }
             const hashedPassword = bcrypt.hashSync(password, 10);
-            const newUser: User = {
-                id: userIdCounter++,
-                name: username,
-                email: email,
-                password: hashedPassword,
-                createdAt: new Date(),
-            };
-            users.push(newUser);
+            // Save the new user to the database using Prisma
+            const newUser = await prisma.user.create({
+                data: {
+                    name: username,
+                    email: email,
+                    password: hashedPassword,
+                },
+            });
             return {
                 status: "success",
                 message: "User created successfully",
@@ -45,10 +44,12 @@ const Users = {
         }
     },
 
-    login(email: string, password: string) : Result<string> {
+    async login(email: string, password: string) : Promise<Result<string>> {
         try {
-            const user = users.find(user => user.email === email);
-            const isPasswordValid = bcrypt.compareSync(password, password);
+            const user = await prisma.user.findUnique({
+                where: { email: email },
+            });
+            const isPasswordValid = bcrypt.compareSync(password, user.password);
             if (!user || !isPasswordValid) {
                 return {
                     status: "error",
@@ -72,8 +73,10 @@ const Users = {
         }
     },
 
-    getUser(userId: number) : Result<User> {
-        const user = users.find(user => user.id === userId);
+    async getUser(userId: number) : Promise<Result<User>> {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        });
         return {
             status: user ? "success" : "error",
             message: user ? "User found" : "User not found",
@@ -81,8 +84,10 @@ const Users = {
         };
     },
     
-    getUserByEmail(email: string): Result<User> {
-        const user = users.find(user => user.email === email);
+    async getUserByEmail(email: string): Promise<Result<User>> {
+        const user = await prisma.user.findUnique({
+            where: { email: email },
+        });
         if (!user) {
             return {
                 status: "error",
