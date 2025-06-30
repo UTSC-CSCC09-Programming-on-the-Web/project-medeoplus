@@ -22,6 +22,7 @@ model User {
   createdAt DateTime @default(now())
   sentMessages Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  documents Document[] @relation("Documents")
 }
 
 model Message {
@@ -38,8 +39,8 @@ model Document {
   id        Int      @id @default(autoincrement())
   title     String
   content   String
-  userId   Int      
+  userId    Int      
   createdAt DateTime @default(now())
-  user User @relation(fields: [userId], references: [id])
+  user      User    @relation("Documents", fields: [userId], references: [id])
 }
 
