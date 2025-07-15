@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Result from "../types/Result";
-import prisma from "../prisma/db";
+import Result from "../types/Result.js";
+import prisma from "../prisma/db.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -49,6 +49,12 @@ const Users = {
             const user = await prisma.user.findUnique({
                 where: { email: email },
             });
+            if (!user) {
+                return {
+                    status: "error",
+                    message: "User not found",
+                };
+            }
             const isPasswordValid = bcrypt.compareSync(password, user.password);
             if (!user || !isPasswordValid) {
                 return {
@@ -80,7 +86,7 @@ const Users = {
         return {
             status: user ? "success" : "error",
             message: user ? "User found" : "User not found",
-            data: user,
+            data: user ? user : undefined,
         };
     },
     

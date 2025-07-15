@@ -1,6 +1,6 @@
-import messagesController from "../controllers/messages_controller"
+import messagesController from "../controllers/messages_controller.js"
 import { Router } from "express";
-import authorizeUser from "../middleware/authorizeUser";
+import authorizeUser from "../middleware/authorizeUser.js";
 
 const messagesRouter = Router();
 

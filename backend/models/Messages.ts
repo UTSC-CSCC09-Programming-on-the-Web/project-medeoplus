@@ -1,5 +1,5 @@
-import prisma from "../prisma/db";
-import Result from "../types/Result";
+import prisma from "../prisma/db.js";
+import Result from "../types/Result.js";
 
 interface Message {
     id: number;

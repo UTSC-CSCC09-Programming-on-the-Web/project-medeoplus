@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import User from "../models/Users";
+import User from "../models/Users.js";
 
 const usersController = {
     async signup(req: Request, res: Response) {

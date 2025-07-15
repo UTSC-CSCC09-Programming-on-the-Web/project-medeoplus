@@ -1,6 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import JwtPayload from "../types/JwtPayload";
+import JwtPayload from "../types/JwtPayload.js";
 
 export default function authorizeUser(req: express.Request, res: express.Response, next: express.NextFunction) {
     const authHeader = req.headers.authorization;

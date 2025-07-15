@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
-import Users from "../models/Users";
-import usersController from "../controllers/users_controller";
-import authorizeUser from "../middleware/authorizeUser";
+import Users from "../models/Users.js";
+import usersController from "../controllers/users_controller.js";
+import authorizeUser from "../middleware/authorizeUser.js";
 
 const usersRouter = express.Router();
 

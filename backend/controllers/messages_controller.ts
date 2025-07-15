@@ -1,6 +1,6 @@
 import express from "express";
 import { Request, Response } from "express";
-import Messages from "../models/Messages";
+import Messages from "../models/Messages.js";
 
 const messagesController = {
     async getMessagesForUser(req: Request, res: Response) {
